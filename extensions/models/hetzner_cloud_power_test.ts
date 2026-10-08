@@ -286,7 +286,7 @@ Deno.test("shutdown: sends an ACPI shutdown and polls until the server is off", 
   assertEquals(power.data.reachedTarget, true);
 });
 
-Deno.test("shutdown: records reachedTarget=false when the OS has not powered off yet", async () => {
+Deno.test("shutdown: fails, after recording state and power, when the OS has not powered off", async () => {
   const writes: Write[] = [];
   const ctx = makeContext(
     { name: "web-1", token: "tok" },
@@ -294,16 +294,48 @@ Deno.test("shutdown: records reachedTarget=false when the OS has not powered off
     writes,
   );
 
-  await withMockedFetch(
+  const err = await withMockedFetch(
     api("shutdown", ["running"]),
     () =>
-      methods.shutdown.execute({ maxPollAttempts: 2, pollIntervalMs: 0 }, ctx),
+      assertRejects(() =>
+        methods.shutdown.execute({ maxPollAttempts: 2, pollIntervalMs: 0 }, ctx)
+      ),
   );
 
+  const message = (err.result as Error).message;
+  assertStringIncludes(message, '"web-1"');
+  assertStringIncludes(message, "still running");
+  assertStringIncludes(message, "poweroff");
   const power = writes.find((w) => w.specName === "power")!;
   assertEquals(power.data.status, "running");
   assertEquals(power.data.reachedTarget, false);
+  assertEquals(writes.some((w) => w.specName === "state"), true);
 });
+
+for (
+  const [action, from, stuck] of [
+    ["poweroff", "running", "running"],
+    ["poweron", "off", "off"],
+  ] as const
+) {
+  Deno.test(`${action}: fails when the server never reaches its target`, async () => {
+    const writes: Write[] = [];
+    const ctx = makeContext(
+      { name: "web-1", token: "tok" },
+      { "web-1": server(42, "web-1", from) },
+      writes,
+    );
+
+    const err = await withMockedFetch(
+      api(action, [from, stuck]),
+      () => assertRejects(() => methods[action].execute(FAST, ctx)),
+    );
+
+    assertStringIncludes((err.result as Error).message, `still ${stuck}`);
+    const power = writes.find((w) => w.specName === "power")!;
+    assertEquals(power.data.reachedTarget, false);
+  });
+}
 
 Deno.test("shutdown waits longer by default than poweroff", () => {
   const shutdownDefaults = methods.shutdown.arguments.parse({});

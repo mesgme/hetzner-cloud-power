@@ -1,6 +1,6 @@
 manifestVersion: 1
 name: "@mesgme/hetzner-cloud-power"
-version: "2026.10.07.2"
+version: "2026.10.08.1"
 description: "Adds poweron, poweroff and shutdown methods to @swamp/hetzner-cloud/servers"
 repository: "https://github.com/mesgme/hetzner-cloud-power"
 visibility: public

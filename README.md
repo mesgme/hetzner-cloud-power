@@ -30,8 +30,10 @@ and writes a `power` resource with `action`, `previousStatus`, `status`,
 `reachedTarget` and the Hetzner `actionId`.
 
 A graceful `shutdown` depends on the OS handling ACPI. If the server is still
-running when polling stops, the method succeeds with `reachedTarget: false`.
-Check later, or use `poweroff`. Both `maxPollAttempts` and `pollIntervalMs`
+running when polling stops, the method fails (non-zero exit) with a message
+that points to `poweroff`. The `state` and `power` resources are still written
+first, with `reachedTarget: false`. The same applies to `poweron` and
+`poweroff` if they never reach their target. Both `maxPollAttempts` and `pollIntervalMs`
 can be set per run.
 
 ## Setup
