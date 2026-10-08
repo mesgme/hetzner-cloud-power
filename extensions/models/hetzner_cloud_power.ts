@@ -343,6 +343,16 @@ function powerMethod(
         powerInstanceName(record.serverName),
         record,
       );
+      if (!record.reachedTarget) {
+        throw new Error(
+          `Server "${record.serverName}" is still ${record.status} after ` +
+            `${args.maxPollAttempts} polls; ${action} did not reach ` +
+            `${TARGET_STATUS[action]}.` +
+            (action === "shutdown"
+              ? " The OS may be ignoring ACPI; run poweroff to force it off."
+              : ""),
+        );
+      }
       return { dataHandles: [stateHandle, powerHandle] };
     },
   };
@@ -379,7 +389,7 @@ export const extension = {
       shutdown: powerMethod(
         "shutdown",
         "Graceful ACPI shutdown (POST shutdown) and wait for the OS to power off. " +
-          "Records reachedTarget=false if it is still running when polling stops.",
+          "Fails (after recording reachedTarget=false) if it is still running when polling stops; use poweroff to force it.",
         { maxPollAttempts: 40, pollIntervalMs: 3000 },
       ),
     },
