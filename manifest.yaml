@@ -4,6 +4,13 @@ version: "2026.10.08.1"
 description: "Adds poweron, poweroff and shutdown methods to @swamp/hetzner-cloud/servers"
 repository: "https://github.com/mesgme/hetzner-cloud-power"
 license: MIT
+valueStatement: >-
+  Lets you power a Hetzner Cloud server on, shut it down gracefully, or
+  hard power it off from swamp, without opening the Hetzner Cloud console. It
+  adds poweron, shutdown and poweroff to the official @swamp/hetzner-cloud
+  servers model, waits until the server reaches the target state, and records
+  what happened. Asking for a state the server is already in is refused
+  cleanly, so a scheduler can treat it as a no-op.
 visibility: public
 labels:
   - hetzner
