@@ -10,6 +10,15 @@ methods to that type. Nothing is tied to a particular account or server: each
 model points at one server by name and uses an API token for that server's
 project.
 
+## Value statement
+
+Lets you power a Hetzner Cloud server on, shut it down gracefully, or hard power
+it off from swamp, without opening the Hetzner Cloud console. It adds poweron,
+shutdown and poweroff to the official @swamp/hetzner-cloud servers model, waits
+until the server reaches the target state, and records what happened. Asking for
+a state the server is already in is refused cleanly, so a scheduler can treat it
+as a no-op.
+
 ## Methods
 
 | Method     | Hetzner API action                         | Waits until |
