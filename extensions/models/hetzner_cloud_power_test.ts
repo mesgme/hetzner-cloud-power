@@ -1,5 +1,5 @@
 /**
- * Tests for the @mesgme/hetzner-cloud-power extension of
+ * Tests for the @puddleworks/hetzner-cloud-power extension of
  * @swamp/hetzner-cloud/servers.
  *
  * Covers the pure helpers and the poweron / poweroff / shutdown execute paths

@@ -1,4 +1,4 @@
-# @mesgme/hetzner-cloud-power
+# @puddleworks/hetzner-cloud-power
 
 Power Hetzner Cloud servers on and off from swamp, without opening the Hetzner
 Cloud console.
@@ -42,7 +42,7 @@ You need a Hetzner Cloud API token with **Read & Write** permission
 (Hetzner Cloud console → your project → Security → API tokens).
 
 ```bash
-swamp extension pull @mesgme/hetzner-cloud-power   # also pulls @swamp/hetzner-cloud
+swamp extension pull @puddleworks/hetzner-cloud-power   # also pulls @swamp/hetzner-cloud
 
 # Create a vault, if you don't have one, and store the token once.
 # `put` prompts for the value.

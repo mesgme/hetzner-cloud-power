@@ -1,5 +1,5 @@
 /**
- * @mesgme/hetzner-cloud-power — power actions for @swamp/hetzner-cloud/servers.
+ * @puddleworks/hetzner-cloud-power — power actions for @swamp/hetzner-cloud/servers.
  *
  * Adds `poweron`, `poweroff` and `shutdown` methods to the official Hetzner
  * Cloud servers model type, which can create, look up and sync servers but not
